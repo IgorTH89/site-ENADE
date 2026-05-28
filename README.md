@@ -1,51 +1,64 @@
 # 🎓 ENADE Questões - Plataforma de Simulados Inteligente
 
-[![Java Version](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?style=for-the-badge&logo=springboot)](https://spring.io/projects/spring-boot)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-JSONB-blue?style=for-the-badge&logo=postgresql)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Container-blue?style=for-the-badge&logo=docker)](https://www.docker.com/)
+> **Status do Projeto:** 🚀 Concluído & Em Produção
 
-Uma aplicação Full Stack robusta e responsiva desenvolvida para auxiliar estudantes na preparação para o exame do ENADE. O sistema permite a geração de simulados dinâmicos com cronômetro regressivo, seleção por disciplinas e entrega um painel de desempenho com métricas visuais.
+Plataforma backend desenvolvida para gerenciamento, categorização e resolução de questões baseadas nos exames oficiais do ENADE (Exame Nacional de Desempenho dos Estudantes). O sistema permite que estudantes realizem simulados inteligentes com persistência de dados e análise de desempenho.
 
 ---
 
-## 🚀 Diferenciais Técnicos (O que há de especial sob o capô?)
+## 🌐 Links do Projeto
 
-Este projeto foi construído aplicando boas práticas de engenharia de software e padrões de mercado:
-
-* **Persistência Híbrida com PostgreSQL `JSONB`**: Em vez de engessar o banco de dados com tabelas relacionais complexas para armazenar alternativas de escolha múltipla (A, B, C, D, E), utilizei o recurso de alta performance **JSONB** do Postgres. Isso permite armazenar e consultar estruturas dinâmicas de dados diretamente em uma única coluna estruturada, otimizando as queries e simplificando consideravelmente o mapeamento de entidades no Java.
-* **Segurança da Informação e Arquitetura Cloud Ready**: O gerenciamento de credenciais críticas (como a string de conexão de produção) foi totalmente desacoplado do código-fonte utilizando **Variáveis de Ambiente** (`${SPRING_DATASOURCE_URL}`). Isso impede o vazamento de credenciais sensíveis no histórico público do Git.
-* **Performance com JPA Open-In-View Desativado**: Configurado explicitamente como `false` para evitar o anti-padrão mundial de manter conexões com o pool do banco de dados presas durante todo o ciclo de renderização das respostas HTTP, garantindo alta escalabilidade para a API.
-* **Containerização com Docker**: Criação de um ambiente de compilação multi-estágio (*Multi-stage build*) otimizado via `Dockerfile`. A aplicação está pronta para ser buildada e rodar em qualquer provedor de nuvem de forma idêntica ao ecossistema local.
+* **API em Produção (Render):** [https://enade-questoes.onrender.com](https://enade-questoes.onrender.com)
+* **Banco de Dados (Neon PostgreSQL):** Nuvem AWS (`us-east-1`)
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias e Ferramentas
 
-### Backend (API REST)
-* **Java 17** (LTS)
-* **Spring Boot 3.x**
-* **Spring Data JPA** (Persistência e Repositórios)
-* **PostgreSQL Driver** (Com suporte nativo a operações JSONB)
-* **Maven** (Gerenciador de dependências)
+O ecossistema do projeto foi construído utilizando as melhores práticas de desenvolvimento backend do mercado:
 
-### Frontend (Interface Responsiva)
-* **HTML5 & JavaScript Vanilla** (Manipulação dinâmica de DOM e tratamento inteligente de objetos JSON estruturados vindos do banco de dados)
-* **Tailwind CSS** (Design moderno via utilitários com efeitos de glassmorphism)
-* **FontAwesome & Google Fonts** (Tipografia e ícones vetoriais)
-* **AOS (Animate On Scroll)** (Animações fluidas de interface)
+* **Linguagem Principal:** Java 17
+* **Framework:** Spring Boot 3.x
+  * Spring Data JPA (Persistência e ORM)
+  * Spring Web (Criação de Endpoints RESTful)
+  * Spring Boot Actuator (Monitoramento de métricas)
+* **Banco de Dados:** PostgreSQL (Hospedado via Neon Serverless Postgres)
+* **Gerenciador de Dependências:** Maven
+* **Containers & DevOps:** Docker & Dockerfile
+* **Hospedagem da API:** Render Cloud
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🧬 Arquitetura e Boas Práticas
 
-```text
-├── src/
-│   ├── main/
-│   │   ├── java/         # Camadas de Controller, Service, Model e Repository (Spring Boot)
-│   │   └── resources/
-│   │       ├── application.properties  # Configurações dinâmicas de Ambiente
-│   │       └── ...
-├── .gitignore            # Proteção contra upload de pastas de compilação locais
-├── Dockerfile            # Instruções de containerização para deploy automatizado
-└── pom.xml               # Manifesto de dependências do ecossistema Maven
+O projeto foi estruturado seguindo o padrão arquitetural em camadas para garantir alta coesão e baixo acoplamento, aplicando os pilares fundamentais da **Programação Orientada a Objetos (POO)**:
+
+* **Encapsulamento:** Proteção das entidades de negócio e exposição segura através de DTOs (Data Transfer Objects).
+* **Camada de Controladores (Resource/Controller):** Exposição dos endpoints REST e manipulação de requisições HTTP.
+* **Camada de Serviço (Service):** Concentração de todas as regras de negócio da plataforma.
+* **Camada de Acesso a Dados (Repository):** Interfaces que estendem o `JpaRepository` para operações seguras de CRUD no PostgreSQL.
+
+---
+
+## 🐳 Configuração de Ambiente com Docker
+
+O projeto está totalmente conteinerizado, permitindo que qualquer desenvolvedor execute a aplicação localmente sem a necessidade de instalar o Java ou o Maven na máquina física.
+
+### Pré-requisitos
+* Git
+* Docker instalado e rodando
+
+### Como executar localmente:
+
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/IgorTH89/site-ENADE.git](https://github.com/IgorTH89/site-ENADE.git)
+2. **Navegue até a pasta do projeto**
+   ```bash
+   cd site-ENADE/questoes
+3. **Cosntrua a imagem Docker**
+    ```bash
+    docker build -t enade-backend .
+4. **Execute o container**
+   ```bash
+   docker run -p 8080:8080 enade-backend
