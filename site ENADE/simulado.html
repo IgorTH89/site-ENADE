@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENADE Questões | Resolvendo Simulado</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#0B1F3A',
+                        secondary: '#2563EB',
+                        accent: '#38BDF8',
+                        success: '#22C55E',
+                        textMain: '#FFFFFF',
+                        textSec: '#CBD5E1',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0B1F3A; color: white; overflow-x: hidden; }
+        .hero-bg { background: linear-gradient(135deg, #0B1F3A 0%, #0a1426 50%, #1e3a8a 100%); min-height: 100vh; position: relative; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+        .btn-glow { transition: .3s; }
+        .btn-glow:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
+        #tsparticles { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; pointer-events: none; }
+        
+        /* Customização sutil dos inputs de alternativa de rádio */
+        .radio-custom { accent-color: #38BDF8; transform: scale(1.2); cursor: pointer; }
+    </style>
+</head>
+
+<body>
+
+<section class="hero-bg flex flex-col min-h-screen">
+    <div id="tsparticles"></div>
+
+    <!-- TOPO DE INFORMAÇÕES (CRONÔMETRO E STATUS) -->
+    <div class="fixed top-0 left-0 w-full z-50 glass border-b border-white/10 px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-textSec">Progresso:</span>
+                <span id="infoProgresso" class="bg-white/10 text-accent font-semibold px-3 py-1 rounded-full text-sm">0 / 0</span>
+            </div>
+            
+            <!-- CRONÔMETRO -->
+            <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/20 px-4 py-2 rounded-full text-red-400 font-bold tracking-wider" id="boxCronometro">
+                <i class="fa-solid fa-clock-rotate-left animate-pulse"></i>
+                <span id="timerDisplay">00:00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÁREA DA QUESTÃO -->
+    <div class="container mx-auto px-6 pt-28 pb-32 relative z-10 flex-grow flex flex-col justify-center max-w-4xl">
+        
+        <!-- Estado de Carregamento (Skeleton / Loading) -->
+        <div id="loading" class="text-center py-20">
+            <i class="fa-solid fa-circle-notch text-5xl text-accent animate-spin mb-4"></i>
+            <p class="text-textSec text-sm uppercase tracking-widest">Buscando questões no banco de dados...</p>
+        </div>
+
+        <!-- Card da Questão Ativa (Inicia invisível e aparece via JS) -->
+        <div id="cardQuestao" class="glass rounded-[2rem] p-6 md:p-10 w-full hidden" data-aos="fade-up">
+            
+            <!-- Cabeçalho da Questão -->
+            <div class="flex flex-wrap justify-between items-center gap-2 border-b border-white/10 pb-4 mb-6">
+                <span id="labelQuestaoNumero" class="text-xs font-bold uppercase tracking-[0.2em] text-accent">Questão 1</span>
+                <span id="labelTema" class="bg-secondary/20 border border-secondary/30 text-white text-xs px-3 py-1 rounded-md font-medium">Tema</span>
+            </div>
+
+            <!-- Enunciado -->
+            <div class="mb-8">
+                <p id="enunciadoQuestao" class="text-base md:text-lg leading-relaxed text-justify whitespace-pre-line">
+                    Texto da questão...
+                </p>
+            </div>
+
+            <!-- Alternativas (Preenchidas via JS) -->
+            <div id="containerAlternativas" class="space-y-4">
+                <!-- Modelo de alternativa gerado dinamicamente: -->
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+    <div class="fixed bottom-0 left-0 w-full z-50 glass border-t border-white/10 px-6 py-4">
+        <div class="container mx-auto max-w-4xl flex justify-between items-center">
+            <button id="btnAnterior" onclick="questaoAnterior()" class="bg-white/10 text-white border border-white/10 px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-white/20 transition-all flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none">
+                <i class="fa-solid fa-arrow-left"></i> Anterior
+            </button>
+            
+            <button id="btnProxima" onclick="proximaQuestao()" class="bg-secondary text-white px-5 py-2.5 rounded-xl font-semibold text-sm btn-glow flex items-center gap-2">
+                Próxima <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <button id="btnFinalizar" onclick="finalizarSimulado()" class="bg-success text-white px-6 py-2.5 rounded-xl font-bold text-sm btn-glow flex items-center gap-2 hidden">
+                <i class="fa-solid fa-check-double"></i> Finalizar Prova
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- AOS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<!-- tsparticles -->
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.3.0/tsparticles.slim.bundle.min.js"></script>
+
+<script>
+    AOS.init({ once: true });
+
+    // Estado global do Simulado
+    let questoes = [];
+    let indiceAtual = 0;
+    let respostasUsuario = {}; // Guarda { idDaQuestao: "alternativaSelecionada" }
+    let tempoRestanteSegundos = 0;
+    let intervaloCronometro = null;
+
+    // Captura os parâmetros vindos da URL (?tempo=X&quantidade=Y&temas=Z)
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramTempo = parseInt(urlParams.get('tempo')) || 60;
+    const paramQuantidade = parseInt(urlParams.get('quantidade')) || 10;
+    const paramDisciplinas = urlParams.get('disciplinas') || "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        inicializarCronometro(paramTempo);
+        buscarQuestoesDoBanco();
+    });
+
+    /*
+    ===============================================
+    1. BUSCA AS QUESTÕES NO BACKEND (API JAVA)
+    ===============================================
+    */
+    async function buscarQuestoesDoBanco() {
+        try {
+            // URL apontando para o seu backend local (mude para a do Render quando fizer o deploy!)
+            const urlBase = "http://localhost:8080/api/questoes/simulado";
+            const urlCompleta = `${urlBase}?quantidade=${paramQuantidade}&disciplinas=${encodeURIComponent(paramDisciplinas)}`;
+            
+            const response = await fetch(urlCompleta);
+            if (!response.ok) throw new Error("Erro na requisição das questões.");
+            
+            questoes = await response.json();
+
+            if (questoes.length === 0) {
+                document.getElementById('loading').innerHTML = `
+                    <i class="fa-solid fa-triangle-exclamation text-4xl text-yellow-500 mb-2"></i>
+                    <p class="text-white font-medium">Nenhuma questão encontrada para os temas selecionados.</p>
+                    <a href="telaSimulados.html" class="text-accent underline mt-4 block text-sm">Voltar e reconfigurar</a>
+                `;
+                return;
+            }
+
+            // Esconde o loading e renderiza a primeira questão
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('cardQuestao').classList.remove('hidden');
+            
+            renderizarQuestao();
+            atualizarBarraProgresso();
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById('loading').innerHTML = `
+                <i class="fa-solid fa-circle-xmark text-4xl text-red-500 mb-2"></i>
+                <p class="text-white font-medium">Falha na conexão com o servidor.</p>
+                <p class="text-textSec text-xs mt-1">Certifique-se de que o backend Java está rodando.</p>
+            `;
+        }
+    }
+
+    /*
+    ===============================================
+    2. RENDERIZAÇÃO DA QUESTÃO NA TELA
+    ===============================================
+    */
+    function renderizarQuestao() {
+        if (questoes.length === 0) return;
+
+        const q = questoes[indiceAtual];
+        
+        // Atualiza textos estruturais
+        document.getElementById('labelQuestaoNumero').innerText = `Questão ${indiceAtual + 1} de ${questoes.length}`;
+        document.getElementById('labelTema').innerText = q.disciplina || "Geral"; 
+        document.getElementById('enunciadoQuestao').innerText = q.enunciado;
+
+        const containerAlt = document.getElementById('containerAlternativas');
+        containerAlt.innerHTML = ""; // Limpa as alternativas anteriores
+
+        // --- TRATAMENTO DO JSONB DAS ALTERNATIVAS ---
+        // --- TRATAMENTO DO JSONB DAS ALTERNATIVAS ---
+        let listaAlternativas = {};
+        try {
+            listaAlternativas = typeof q.alternativas === 'string' ? JSON.parse(q.alternativas) : q.alternativas;
+        } catch (e) {
+            console.error("Erro ao processar as alternativas em JSON da questão: ", q.id);
+        }
+
+        // Pega as chaves reais do JSON (como 'A', 'B', 'C', 'D', 'E' ou 'a', 'b'...)
+        const chavesReais = Object.keys(listaAlternativas).filter(chave => chave !== 'gabarito' && chave !== 'respostaCorreta');
+
+        chavesReais.sort().forEach((chaveOriginal) => {
+            const dadoAlternativa = listaAlternativas[chaveOriginal];
+            
+            // CORREÇÃO DO [object Object]:
+            // Se o dado for um objeto, tentamos buscar a propriedade de texto comum (geralmente 'texto' ou 'enunciado')
+            // Se for uma String direta, usamos ela mesma.
+            let textoExibicao = "";
+            if (typeof dadoAlternativa === 'object' && dadoAlternativa !== null) {
+                textoExibicao = dadoAlternativa.texto || dadoAlternativa.descricao || dadoAlternativa.enunciado || JSON.stringify(dadoAlternativa);
+            } else {
+                textoExibicao = dadoAlternativa;
+            }
+
+            // Força a exibição visual como Maiúscula na tela (A, B, C...)
+            const letraVisual = chaveOriginal.toUpperCase();
+            
+            // Verifica se esta alternativa é a que o usuário já respondeu antes
+            const jaSelecionada = respostasUsuario[q.id] === letraVisual;
+
+            // Cria o container clicável da alternativa
+            const div = document.createElement('div');
+            div.className = `flex items-start gap-4 bg-white/5 p-4 rounded-2xl border ${jaSelecionada ? 'border-accent bg-white/10' : 'border-white/10'} cursor-pointer hover:bg-white/10 transition-all select-none`;
+            
+            div.onclick = () => selecionarAlternativa(q.id, letraVisual, div);
+
+            div.innerHTML = `
+                <input type="radio" name="opcaoQuestao" value="${letraVisual}" ${jaSelecionada ? 'checked' : ''} 
+                       class="radio-custom mt-1">
+                <div class="text-sm md:text-base leading-relaxed">
+                    <span class="font-bold text-accent mr-1">${letraVisual})</span> ${textoExibicao}
+                </div>
+            `;
+
+            // Evita conflito de cliques no input radio
+            const inputRadio = div.querySelector('input');
+            inputRadio.onclick = (event) => {
+                event.stopPropagation();
+                selecionarAlternativa(q.id, letraVisual, div);
+            };
+
+            containerAlt.appendChild(div);
+        });
+
+        // Gerencia visibilidade dos botões de controle de navegação
+        document.getElementById('btnAnterior').disabled = (indiceAtual === 0);
+        
+        if (indiceAtual === questoes.length - 1) {
+            document.getElementById('btnProxima').classList.add('hidden');
+            document.getElementById('btnFinalizar').classList.remove('hidden');
+        } else {
+            document.getElementById('btnProxima').classList.remove('hidden');
+            document.getElementById('btnFinalizar').classList.add('hidden');
+        }
+    }
+
+    function selecionarAlternativa(questaoId, letra, elementoHtml) {
+        respostasUsuario[questaoId] = letra;
+        
+        // Remove a borda de destaque das outras alternativas visuais
+        const todasAlts = document.getElementById('containerAlternativas').children;
+        for (let div of todasAlts) {
+            div.classList.remove('border-accent', 'bg-white/10');
+            div.classList.add('border-white/10');
+            div.querySelector('input').checked = false;
+        }
+        
+        // Destaca e marca a alternativa clicada atualmente
+        elementoHtml.classList.remove('border-white/10');
+        elementoHtml.classList.add('border-accent', 'bg-white/10');
+        elementoHtml.querySelector('input').checked = true;
+    }
+
+    function proximaQuestao() {
+        if (indiceAtual < questoes.length - 1) {
+            indiceAtual++;
+            renderizarQuestao();
+            atualizarBarraProgresso();
+        }
+    }
+
+    function questaoAnterior() {
+        if (indiceAtual > 0) {
+            indiceAtual--;
+            renderizarQuestao();
+            atualizarBarraProgresso();
+        }
+    }
+
+    function atualizarBarraProgresso() {
+        document.getElementById('infoProgresso').innerText = `${indiceAtual + 1} / ${questoes.length}`;
+    }
+
+    /*
+    ===============================================
+    3. CONTROLADOR DO CRONÔMETRO RECOREGRESSIVO
+    ===============================================
+    */
+    function inicializarCronometro(minutos) {
+        tempoRestanteSegundos = minutos * 60;
+        
+        intervaloCronometro = setInterval(() => {
+            if (tempoRestanteSegundos <= 0) {
+                clearInterval(intervaloCronometro);
+                alert("Tempo limite esgotado! Seu simulado será finalizado automaticamente.");
+                finalizarSimulado();
+                return;
+            }
+            
+            tempoRestanteSegundos--;
+            
+            // Cálculos matemáticos para formatação H:M:S
+            const horas = Math.floor(tempoRestanteSegundos / 3600);
+            const minutosRestantes = Math.floor((tempoRestanteSegundos % 3600) / 60);
+            const segundosRestantes = tempoRestanteSegundos % 60;
+            
+            const fH = horas.toString().padStart(2, '0');
+            const fM = minutosRestantes.toString().padStart(2, '0');
+            const fS = segundosRestantes.toString().padStart(2, '0');
+            
+            document.getElementById('timerDisplay').innerText = `${fH}:${fM}:${fS}`;
+
+            // Efeito visual de alerta nos últimos 2 minutos
+            if (tempoRestanteSegundos <= 120) {
+                const box = document.getElementById('boxCronometro');
+                box.classList.remove('bg-red-500/10', 'text-red-400');
+                box.classList.add('bg-red-500', 'text-white', 'animate-pulse');
+            }
+        }, 1000);
+    }
+
+    /*
+    ========================================================
+    4. CORREÇÃO, ARMAZENAMENTO E ENVIO DO DESEMPENHO
+    ========================================================
+    */
+    function finalizarSimulado() {
+        clearInterval(intervaloCronometro);
+
+        let countAcertos = 0;
+        let countErros = 0;
+
+        questoes.forEach(q => {
+            const respostaMarcada = respostasUsuario[q.id];
+            
+            // Tratamento do JSON para buscar o gabarito correto de dentro dele
+            let listaAlternativas = {};
+            try {
+                listaAlternativas = typeof q.alternativas === 'string' ? JSON.parse(q.alternativas) : q.alternativas;
+            } catch(e){}
+
+            // ATENÇÃO: Verifique se a chave do gabarito dentro do seu JSON se chama 'gabarito' ou 'respostaCorreta'
+            const respostaCertaDoBanco = listaAlternativas.gabarito || listaAlternativas.respostaCorreta;
+
+            if (respostaMarcada === respostaCertaDoBanco) {
+                countAcertos++;
+            } else {
+                countErros++;
+            }
+        });
+
+        // Salva localmente no localStorage para alimentar a telaDesempenho.html
+        localStorage.setItem('grafico_acertos', countAcertos);
+        localStorage.setItem('grafico_erros', countErros);
+        
+        // Redireciona para ver o Gráfico Donut
+        window.location.href = 'telaDesempenho.html';
+    }
+
+    /*
+    =======================
+    PARTÍCULAS DE FUNDO
+    =======================
+    */
+    tsParticles.load({
+        id: "tsparticles",
+        options: {
+            particles: {
+                number: { value: 35 },
+                color: { value: ["#38BDF8", "#2563EB"] },
+                move: { enable: true, speed: 0.8, direction: "top" },
+                opacity: { value: { min: 0.1, max: 0.3 } },
+                size: { value: { min: 1, max: 3 } }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

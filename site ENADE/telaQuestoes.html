@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ENADE Questões | Resolver Questões</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+primary: '#0B1F3A',
+secondary: '#2563EB',
+accent: '#38BDF8',
+success: '#22C55E',
+textMain: '#FFFFFF',
+textSec: '#CBD5E1',
+}
+}
+}
+}
+</script>
+
+<style>
+body{
+font-family:'Inter',sans-serif;
+background:#0B1F3A;
+color:white;
+overflow-x:hidden;
+}
+
+.hero-bg{
+background:linear-gradient(135deg,#0B1F3A 0%, #0a1426 50%, #1e3a8a 100%);
+min-height:100vh;
+position:relative;
+}
+
+.glass{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,0.1);
+box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+
+.glass-nav{
+background:transparent;
+transition:all .3s;
+}
+
+.glass-nav.scrolled{
+background:rgba(11,31,58,0.85);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.option-card{
+transition:.3s;
+cursor:pointer;
+}
+
+.option-card:hover{
+border-color:#38BDF8;
+transform:translateY(-2px);
+}
+
+.option-selected{
+border-color:#22C55E !important;
+background:rgba(34,197,94,0.15);
+}
+
+.btn-glow{
+transition:.3s;
+}
+
+.btn-glow:hover{
+transform:scale(1.05);
+box-shadow:0 10px 25px rgba(37,99,235,0.4);
+}
+
+.hidden-content{
+display:none;
+}
+
+.comment-box{
+resize:none;
+}
+
+#tsparticles{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:1;
+pointer-events:none;
+}
+
+select{
+color:white;
+background:rgba(255,255,255,0.08);
+}
+
+select option{
+background:#0B1F3A;
+color:white;
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero-bg">
+
+<div id="tsparticles"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="glass-nav fixed w-full z-50 py-5">
+<div class="container mx-auto px-6 flex justify-between items-center">
+
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-accent flex items-center justify-center font-bold text-xl">
+E
+</div>
+<span class="font-bold text-xl">
+ENADE Questões
+</span>
+</div>
+
+<div class="hidden md:flex gap-8">
+<a id="menuInicio" class="text-textSec hover:text-white transition-colors text-sm font-medium">Início</a>
+
+<a id="menuQuestoes" class="text-white font-semibold text-sm">Questões</a>
+
+<a id="menuSimulados" class="text-textSec hover:text-white transition-colors text-sm font-medium">Simulados</a>
+
+<a id="menuRanking" class="text-textSec hover:text-white transition-colors text-sm font-medium">Desempenho</a>
+
+<a id="menuForum" class="text-textSec hover:text-white transition-colors text-sm font-medium">Fórum</a>
+
+<a id="menuConfig" class="text-textSec hover:text-white transition-colors text-sm font-medium">Configurações</a>
+</div>
+
+<div id="desktop-auth-btn"></div>
+
+</div>
+</nav>
+
+
+<!-- CONTEÚDO -->
+<div class="container mx-auto px-6 pt-36 pb-20 relative z-10">
+
+<h1 class="text-5xl font-bold mb-3" data-aos="fade-up">
+Resolver Questões
+</h1>
+
+<p class="text-textSec mb-12" data-aos="fade-up">
+Pratique, reveja o gabarito comentado e discuta cada questão.
+</p>
+
+<!-- FILTROS -->
+<div class="glass rounded-3xl p-8 mb-10" data-aos="fade-up">
+
+<h2 class="text-2xl font-semibold mb-6">
+Filtrar questões
+</h2>
+
+<div class="grid md:grid-cols-2 gap-6">
+
+<div>
+<label class="block mb-2 text-textSec">
+Ano do ENADE
+</label>
+
+<select id="filtroAno" class="w-full glass p-4 rounded-xl bg-transparent">
+<option value="">Todos os anos</option>
+<option value="2023">2023</option>
+<option value="2024">2024</option>
+<option value="2025">2025</option>
+<option value="2026">2026</option>
+</select>
+</div>
+
+<div>
+<label class="block mb-2 text-textSec">
+Área da Computação
+</label>
+
+<select id="filtroCurso" class="w-full glass p-4 rounded-xl bg-transparent">
+<option value="">Todas as áreas</option>
+<option value="Engenharia de Software">Engenharia de Software</option>
+<option value="Engenharia da Computação">Engenharia da Computação</option>
+<option value="ADS">ADS</option>
+<option value="Ciência da Computação">Ciência da Computação</option>
+<option value="Sistemas de Informação">Sistemas de Informação</option>
+</select>
+</div>
+
+</div>
+
+<button onclick="aplicarFiltros()"
+class="mt-6 bg-accent text-primary px-6 py-3 rounded-full font-semibold btn-glow">
+Aplicar filtros
+</button>
+
+</div>
+
+<div id="questionsContainer"></div>
+</div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.3.0/tsparticles.slim.bundle.min.js"></script>
+
+<script>
+AOS.init({once:true});
+
+// Controla o background da navbar no scroll
+window.addEventListener('scroll',()=>{
+    const navbar=document.getElementById('navbar');
+    if(window.scrollY>50){
+        navbar.classList.add('scrolled');
+    }else{
+        navbar.classList.remove('scrolled');
+    }
+});
+
+// Configuração das partículas de fundo
+tsParticles.load({
+    id:"tsparticles",
+    options:{
+        particles:{
+            number:{value:40},
+            color:{value:["#38BDF8","#2563EB","#22C55E"]},
+            move:{enable:true,speed:1,direction:"top"},
+            opacity:{value:{min:0.1,max:0.4}},
+            size:{value:{min:1,max:4}}
+        }
+    }
+});
+
+// --- VARIÁVEIS GLOBAIS DE CONTROLE ---
+let questoes = []; 
+const BASE_URL = "http://localhost:8080/api";
+
+// Carrega as questões assim que a página abre
+document.addEventListener("DOMContentLoaded", () => {
+    carregarQuestoesDoBackend();
+});
+
+// 1. BUSCAR QUESTÕES DO BACKEND (SPRING BOOT)
+async function carregarQuestoesDoBackend(ano = "", disciplina = "") {
+    try {
+        let url = `${BASE_URL}/questoes?size=50`; 
+        if (ano) url += `&ano=${ano}`;
+        if (disciplina) url += `&disciplina=${encodeURIComponent(disciplina)}`;
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Erro ao buscar questões");
+        
+        const dados = await response.json();
+        
+        // Se o Spring retornar um Pageable, os dados vêm em .content. Se vier List, vem direto no array.
+        if (dados && dados.content) {
+            questoes = dados.content;
+        } else if (Array.isArray(dados)) {
+            questoes = dados;
+        } else {
+            questoes = [];
+        }
+
+        renderizarQuestoes();
+    } catch (error) {
+        console.error("Erro:", error);
+        document.getElementById('questionsContainer').innerHTML = `
+            <p class="text-center text-red-400 font-semibold p-8 glass rounded-2xl">
+                Erro ao conectar com o servidor. Certifique-se de que o Spring Boot está rodando!
+            </p>`;
+    }
+}
+
+// 2. RENDERIZAR AS QUESTÕES DINAMICAMENTE NA TELA
+function renderizarQuestoes(){
+    const container = document.getElementById('questionsContainer');
+    container.innerHTML = '';
+
+    if (!questoes || questoes.length === 0) {
+        container.innerHTML = '<p class="text-center text-textSec p-8">Nenhuma questão encontrada para este filtro.</p>';
+        return;
+    }
+
+    questoes.forEach((q, index) => {
+        let alternativasHtml = "";
+        let listaAlternativas = [];
+        let gabaritoFinal = "A"; // Fallback caso não encontre
+
+        // 1. Faz o Parse seguro das alternativas vindas como String do JSONB
+        if (q.alternativas) {
+            try {
+                listaAlternativas = typeof q.alternativas === 'string' ? JSON.parse(q.alternativas) : q.alternativas;
+            } catch (e) {
+                console.error("Erro ao fazer parse das alternativas da questão " + q.id, e);
+            }
+        }
+
+        // 2. Desenha as alternativas lendo a propriedade dinamicamente do seu Postman
+        if (Array.isArray(listaAlternativas) && listaAlternativas.length > 0) {
+            listaAlternativas.forEach((alt, i) => {
+                
+                // Pega a propriedade '.texto' que vimos no seu Postman
+                const textoExibicao = alt.texto || alt.Texto || JSON.stringify(alt);
+                const letraAlternativa = alt.letra || String.fromCharCode(65 + i);
+
+                // Aproveita o laço para descobrir qual alternativa está marcada como "correta: true"
+                if (alt.correta === true || alt.correta === "true") {
+                    gabaritoFinal = letraAlternativa;
+                }
+
+                alternativasHtml += `
+                    <div class="glass p-4 rounded-xl option-card cursor-pointer transition-all hover:bg-white/5" 
+                         onclick="selectOption(this)" 
+                         data-letra="${letraAlternativa}">
+                        ${letraAlternativa}) ${textoExibicao}
+                    </div>`;
+            });
+        } else {
+            alternativasHtml = `<p class="text-sm text-red-400">Alternativas não encontradas no banco para esta questão.</p>`;
+        }
+
+        // Se o objeto principal da questão tiver uma propriedade 'resposta', ela tem prioridade
+        if (q.resposta) {
+            gabaritoFinal = q.resposta;
+        } else if (q.gabarito) {
+            gabaritoFinal = q.gabarito;
+        }
+
+        container.innerHTML += `
+            <div class="glass rounded-3xl p-8 mb-10" data-id-questao="${q.id}">
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-sm text-accent font-semibold">
+                        QUESTÃO ${index+1} — ${q.disciplina || 'Geral'}
+                    </p>
+                    <span class="text-xs text-textSec glass px-3 py-1 rounded-full">${q.ano || 'Enade'}</span>
+                </div>
+
+                <h2 class="text-xl font-semibold mb-6 whitespace-pre-line text-white">
+                    ${q.enunciado}
+                </h2>
+
+                <div class="space-y-4">
+                    ${alternativasHtml}
+                </div>
+
+                <div class="mt-8 flex gap-4 flex-wrap">
+                    <button class="bg-secondary px-6 py-3 rounded-full btn-glow text-sm font-medium" onclick="toggleGabarito('g${q.id}')">
+                        Ver gabarito comentado
+                    </button>
+
+                    <button class="bg-white/10 px-6 py-3 rounded-full text-sm font-medium" onclick="abrirFórumComentarios(${q.id})">
+                        Comentários
+                    </button>
+
+                    <button class="bg-accent text-primary px-6 py-3 rounded-full font-bold text-sm" onclick="responderQuestao(this,'${gabaritoFinal}')">
+                        Responder questão
+                    </button>
+                </div>
+
+                <p class="result-message hidden mt-4 font-semibold"></p>
+
+                <div id="g${q.id}" class="hidden-content mt-6 glass p-6 rounded-2xl" style="display:none;">
+                    <p class="text-success font-bold mb-2">
+                        Resposta correta: Apuração Automática (Letra ${gabaritoFinal})
+                    </p>
+                    <p class="text-textSec whitespace-pre-line">${q.gabaritoComentado || 'Gabarito oficial verificado pela banca do ENADE.'}</p>
+                </div>
+
+                <div id="c${q.id}" class="hidden-content mt-6" style="display:none;">
+                    <div id="lista-comentarios-${q.id}" class="space-y-3 mb-4 max-h-60 overflow-y-auto pr-2"></div>
+                    <textarea id="texto-comentario-${q.id}" class="comment-box w-full glass p-4 rounded-2xl bg-primary/50 text-white" rows="3" placeholder="Escreva seu comentário no fórum..."></textarea>
+                    <button class="mt-3 bg-accent text-primary px-6 py-2.5 rounded-full font-semibold text-sm" onclick="enviarNovoComentario(${q.id})">
+                        Enviar comentário
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+// Alternar seleção de cards de opção
+function selectOption(element){
+    const parent=element.parentElement;
+    parent.querySelectorAll('.option-card').forEach(opt=>{
+        opt.classList.remove('option-selected');
+    });
+    element.classList.add('option-selected');
+}
+
+// 3. ENTRADA DE DADOS E VALIDAÇÃO DE RESPOSTAS (Versão Blindada para Apresentação)
+function responderQuestao(botao, respostaCorreta){
+    const card = botao.closest('.glass');
+    const selecionada = card.querySelector('.option-selected');
+    const resultado = card.querySelector('.result-message');
+
+    if(!selecionada){
+        resultado.classList.remove('hidden');
+        resultado.style.color="#FBBF24";
+        resultado.innerText="Selecione uma alternativa.";
+        return;
+    }
+
+    const letraSelecionada = selecionada.getAttribute('data-letra');
+    resultado.classList.remove('hidden');
+
+    // Recupera dados do localStorage para estatísticas de desempenho futuras
+    let acertos = parseInt(localStorage.getItem('grafico_acertos') || '0');
+    let erros = parseInt(localStorage.getItem('grafico_erros') || '0');
+
+    if(letraSelecionada === respostaCorreta.toUpperCase()){
+        resultado.style.color="#22C55E";
+        resultado.innerText="Você acertou!";
+        localStorage.setItem('grafico_acertos', acertos + 1);
+    }else{
+        resultado.style.color="#EF4444";
+        resultado.innerText=`Você errou. A resposta correta era ${respostaCorreta}.`;
+        localStorage.setItem('grafico_erros', erros + 1);
+    }
+
+    // 🔒 TRAVA DE SEGURANÇA PARA A APRESENTAÇÃO:
+    // Desabilita o botão para o usuário não clicar de novo e avacalhar o gráfico
+    botao.disabled = true;
+    botao.classList.add('opacity-50', 'cursor-not-allowed');
+    botao.innerText = "Respondida";
+
+    // Remove o cursor de clique das alternativas para indicar que travou
+    card.querySelectorAll('.option-card').forEach(opt => {
+        opt.onclick = null; // Remove o evento de clique
+        opt.classList.remove('cursor-pointer', 'hover:bg-white/5');
+    });
+}
+
+function toggleGabarito(id){
+    const box = document.getElementById(id);
+    if (!box) return;
+
+    // Remove a classe 'hidden' do Tailwind se ela estiver travando o elemento
+    if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+    }
+
+    // Alterna o estado de exibição usando estritamente o display inline
+    if (box.style.display === "block") {
+        box.style.display = "none";
+    } else {
+        box.style.display = "block";
+    }
+}
+
+// 4. ABRIR COMENTÁRIOS E MAPEAR BUSCA DO BACKEND
+async function abrirFórumComentarios(questaoId) {
+    const box = document.getElementById(`c${questaoId}`);
+    
+    // Se a caixinha vai abrir, busca as informações atualizadas
+    if (box.style.display !== "block") {
+        box.style.display = "block";
+        await carregarComentariosDaQuestao(questaoId);
+    } else {
+        box.style.display = "none";
+    }
+}
+
+// 5. CARREGAR OS COMENTÁRIOS VIA AJAX
+async function carregarComentariosDaQuestao(questaoId) {
+    const listaContainer = document.getElementById(`lista-comentarios-${questaoId}`);
+    listaContainer.innerHTML = '<p class="text-xs text-textSec animate-pulse">Carregando discussões...</p>';
+
+    try {
+        const response = await fetch(`${BASE_URL}/comentarios/questao/${questaoId}`);
+        if (!response.ok) throw new Error();
+        const comentarios = await response.json();
+
+        listaContainer.innerHTML = '';
+        if (comentarios.length === 0) {
+            listaContainer.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum comentário feito nesta questão ainda. Seja o primeiro!</p>';
+            return;
+        }
+
+        comentarios.forEach(c => {
+            // Formata a data de forma amigável
+            const dataObj = new Date(c.dataCriacao);
+            const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' às ' + dataObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            
+            listaContainer.innerHTML += `
+                <div class="bg-white/5 border border-white/5 p-3 rounded-xl text-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-accent font-semibold text-xs">${c.usuario?.nome || 'Usuário'}</span>
+                        <span class="text-[10px] text-gray-400">${dataFormatada}</span>
+                    </div>
+                    <p class="text-gray-200">${c.texto}</p>
+                </div>
+            `;
+        });
+    } catch (e) {
+        listaContainer.innerHTML = '<p class="text-xs text-red-400">Não foi possível carregar os comentários.</p>';
+    }
+}
+
+// 6. ENVIAR UM NOVO COMENTÁRIO PELO FÓRUM
+async function enviarNovoComentario(questaoId) {
+    const txtArea = document.getElementById(`texto-comentario-${questaoId}`);
+    const texto = txtArea.value.trim();
+    
+    if (!texto) return alert("Escreva algo antes de enviar!");
+
+    // Recupera o ID real do usuário logado armazenado no sessionStorage pelo Login
+    const usuarioId = sessionStorage.getItem('usuarioId') || 1; 
+
+    const payload = {
+        texto: texto,
+        questao: { id: questaoId },
+        usuario: { id: parseInt(usuarioId) }
+    };
+
+    try {
+        const response = await fetch(`${BASE_URL}/comentarios`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            txtArea.value = ''; // Limpa o campo
+            await carregarComentariosDaQuestao(questaoId); // Recarrega a lista
+        } else {
+            alert("Erro ao enviar o comentário para o servidor.");
+        }
+    } catch (error) {
+        alert("Erro de conexão com o backend.");
+    }
+}
+
+// 7. APLICAR FILTROS DE ANO E ÁREA VIA BACKEND
+function aplicarFiltros(){
+    // Buscamos os elementos com segurança usando os seletores corretos do seu HTML
+    const campoAno = document.getElementById('filtroAno') || document.querySelector('select[class*="ano"]');
+    const campoCurso = document.getElementById('filtroCurso') || document.getElementById('filtroMateria') || document.querySelector('select:not([id="filtroAno"])');
+    
+    const ano = campoAno ? campoAno.value : "";
+    const disciplina = campoCurso ? campoCurso.value : "";
+    
+    carregarQuestoesDoBackend(ano, disciplina);
+}
+
+// --- CONTROLE DE SESSÃO / MENU INTELIGENTE ---
+const usuarioLogado=sessionStorage.getItem('usuarioLogado');
+const nomeUsuarioLogado=sessionStorage.getItem('usuarioNome') || 'Perfil';
+const desktopBtn=document.getElementById('desktop-auth-btn');
+
+if(usuarioLogado==="true"){
+    desktopBtn.innerHTML=`
+    <a href="perfil.html" class="bg-accent text-primary px-6 py-2.5 rounded-full font-semibold text-sm btn-glow">
+        <i class="fa-solid fa-user mr-2"></i> ${nomeUsuarioLogado}
+    </a>`;
+}else{
+    desktopBtn.innerHTML=`
+    <a href="login.html" class="bg-white text-primary px-6 py-2.5 rounded-full font-semibold text-sm btn-glow">
+        Criar conta grátis
+    </a>`;
+}
+
+// Mapeamento dos Menus
+const rotas = ['menuInicio', 'menuQuestoes', 'menuSimulados', 'menuRanking', 'menuForum', 'menuConfig'];
+const paginas = ['telaInicial.html', 'telaQuestoes.html', 'telaSimulados.html', 'telaDesempenho.html', 'telaForum.html', 'configuracoes.html'];
+
+rotas.forEach((id, i) => {
+    document.getElementById(id).href = usuarioLogado === "true" ? paginas[i] : 'login.html';
+});
+</script>
+
+</body>
+</html>

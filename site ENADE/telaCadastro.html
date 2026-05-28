@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENADE Questões | Cadastro</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        primary: '#0B1F3A',
+                        secondary: '#2563EB',
+                        accent: '#38BDF8',
+                        textSec: '#CBD5E1'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B1F3A;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .hero-bg {
+            background:
+                linear-gradient(135deg,
+                    #0B1F3A 0%,
+                    #0a1426 50%,
+                    #1e3a8a 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .shape-blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: .35;
+            animation: pulse 10s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.2) translate(20px, -20px);
+            }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, .05);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, .08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+        }
+
+        .btn-glow {
+            transition: .3s;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 25px rgba(37, 99, 235, .45);
+        }
+
+        #tsparticles {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero-bg flex flex-col relative overflow-hidden">
+
+        <div class="shape-blob bg-blue-500 w-[500px] h-[500px] rounded-full top-[-100px] left-[-100px]"></div>
+
+        <div class="shape-blob bg-cyan-400 w-[400px] h-[400px] rounded-full bottom-[-100px] right-[-100px]"></div>
+
+        <div id="tsparticles"></div>
+
+        <!-- NAVBAR -->
+        <nav class="w-full py-6 relative z-20">
+            <div class="container mx-auto px-6 flex justify-between items-center">
+
+                <div
+                    onclick="window.location.href='../index.html'"
+                    class="cursor-pointer flex items-center gap-3">
+
+                    <div
+                        class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-accent flex items-center justify-center font-bold">
+                        E
+                    </div>
+
+                    <span class="font-bold text-xl">
+                        ENADE Questões
+                    </span>
+
+                </div>
+
+                <a href="login.html"
+                    class="text-sm text-textSec hover:text-white transition">
+                    Já tenho conta
+                </a>
+
+            </div>
+        </nav>
+
+        <!-- CONTEÚDO -->
+        <div class="flex-grow flex items-center justify-center px-6 relative z-10 py-10">
+
+            <div class="w-full max-w-[550px]">
+
+                <div class="text-center mb-8">
+
+                    <h1 class="text-4xl font-bold mb-4">
+                        Criar
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-secondary">
+                            conta
+                        </span>
+                    </h1>
+
+                    <p class="text-textSec leading-relaxed">
+                        Cadastre-se gratuitamente e comece sua preparação
+                        inteligente para o ENADE.
+                    </p>
+
+                </div>
+
+                <div class="glass rounded-3xl p-8 relative overflow-hidden">
+
+                    <div
+                        class="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 blur-3xl rounded-full">
+                    </div>
+
+                    <div
+                        class="absolute -bottom-20 -left-20 w-40 h-40 bg-cyan-400/10 blur-3xl rounded-full">
+                    </div>
+
+                    <form id="cadastroForm" class="space-y-5">
+
+                        <!-- Nome -->
+                        <div>
+                            <label class="text-xs font-semibold text-textSec block mb-2">
+                                Nome completo
+                            </label>
+
+                            <div class="relative">
+                                <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-textSec/60"></i>
+
+                                <input
+                                    type="text"
+                                    required
+                                    placeholder="Seu nome completo"
+                                    class="w-full pl-11 pr-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-textSec/40 focus:outline-none focus:ring-1 focus:ring-accent">
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="text-xs font-semibold text-textSec block mb-2">
+                                E-mail
+                            </label>
+
+                            <div class="relative">
+                                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-textSec/60"></i>
+
+                                <input
+                                    type="email"
+                                    required
+                                    placeholder="voce@universidade.com"
+                                    class="w-full pl-11 pr-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-textSec/40 focus:outline-none focus:ring-1 focus:ring-accent">
+                            </div>
+                        </div>
+
+                        <!-- Curso -->
+                        <div>
+                            <label class="text-xs font-semibold text-textSec block mb-2">
+                                Curso
+                            </label>
+
+                            <input
+                                type="text"
+                                required
+                                placeholder="Ex: Ciência da Computação"
+                                class="w-full px-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-textSec/40 focus:outline-none focus:ring-1 focus:ring-accent">
+                        </div>
+
+                        <!-- Universidade -->
+                        <div>
+                            <label class="text-xs font-semibold text-textSec block mb-2">
+                                Instituição
+                            </label>
+
+                            <input
+                                type="text"
+                                required
+                                placeholder="Sua universidade"
+                                class="w-full px-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-textSec/40 focus:outline-none focus:ring-1 focus:ring-accent">
+                        </div>
+
+                        <!-- Senha -->
+                        <div>
+                            <label class="text-xs font-semibold text-textSec block mb-2">
+                                Senha
+                            </label>
+
+                            <input
+                                type="password"
+                                required
+                                placeholder="••••••••••"
+                                class="w-full px-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-textSec/40 focus:outline-none focus:ring-1 focus:ring-accent">
+                        </div>
+
+                        <!-- Confirmar -->
+                        <div>
+                            <label class="text-xs font-semibold text-textSec block mb-2">
+                                Confirmar senha
+                            </label>
+
+                            <input
+                                type="password"
+                                required
+                                placeholder="••••••••••"
+                                class="w-full px-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-textSec/40 focus:outline-none focus:ring-1 focus:ring-accent">
+                        </div>
+
+                        <!-- Termos -->
+                        <div class="flex items-start gap-3">
+
+                            <input
+                                type="checkbox"
+                                required
+                                class="mt-1">
+
+                            <label class="text-sm text-textSec leading-relaxed">
+                                Concordo com os
+                                <a href="#"
+                                    class="text-accent hover:underline">
+                                    termos de uso
+                                </a>
+                                e
+                                <a href="#"
+                                    class="text-accent hover:underline">
+                                    política de privacidade
+                                </a>
+                            </label>
+
+                        </div>
+
+                        <!-- Botão -->
+                        <button
+                            type="submit"
+                            class="w-full py-4 rounded-full bg-secondary font-semibold btn-glow flex justify-center items-center gap-2">
+
+                            Criar conta
+
+                            <i class="fa-solid fa-user-plus"></i>
+
+                        </button>
+
+                    </form>
+
+                    <div
+                        id="successMessage"
+                        class="hidden mt-6 p-4 rounded-2xl bg-green-500/10 border border-green-400/20 text-green-300 text-sm text-center">
+
+                        <i class="fa-solid fa-circle-check mr-2"></i>
+                        Cadastro realizado com sucesso.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.3.0/tsparticles.slim.bundle.min.js"></script>
+
+    <script>
+        const form = document.getElementById('cadastroForm');
+const success = document.getElementById('successMessage');
+
+form.addEventListener('submit', async function (e) {
+    e.preventDefault(); // Impede a página de recarregar
+
+    // Captura os dados digitados na tela
+    const nome = document.querySelector('input[placeholder="Seu nome completo"]').value.trim();
+    const email = document.querySelector('input[type="email"]').value.trim();
+    const senha = document.querySelector('input[type="password"]').value;
+
+    const payload = {
+        nome: nome,
+        email: email,
+        senha: senha
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/api/auth/cadastro", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.status === 201 || response.ok) {
+            success.classList.remove('hidden');
+            form.reset();
+            
+            // Redireciona para o login após 2 segundos para o usuário ver a mensagem de sucesso
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        } else {
+            alert("Erro ao realizar o cadastro. O e-mail pode já estar em uso.");
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível conectar ao servidor backend.");
+    }
+});
+    </script>
+
+</body>
+</html>

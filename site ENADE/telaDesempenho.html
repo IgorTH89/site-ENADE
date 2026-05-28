@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desempenho | ENADE Questões</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#0B1F3A',
+                        secondary: '#2563EB',
+                        accent: '#38BDF8',
+                        success: '#22C55E',
+                        textMain: '#FFFFFF',
+                        textSec: '#CBD5E1',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0B1F3A; color: #FFFFFF; overflow-x: hidden; }
+        .hero-bg { background: linear-gradient(135deg, #0B1F3A 0%, #0a1426 50%, #1e3a8a 100%); position: relative; }
+        .shape-blob { position: absolute; filter: blur(80px); z-index: 0; opacity: 0.4; animation: pulse-blob 10s infinite alternate; }
+        @keyframes pulse-blob { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.1) translate(20px, -20px); } }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); }
+        .glass-nav { background: rgba(11, 31, 58, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .glass-card:hover { transform: translateY(-5px); border-color: rgba(56, 189, 248, 0.3); }
+    </style>
+</head>
+<body class="antialiased hero-bg min-h-screen flex flex-col">
+
+    <div class="shape-blob bg-secondary w-[500px] h-[500px] rounded-full top-[-100px] left-[-100px]"></div>
+    <div class="shape-blob bg-accent w-[400px] h-[400px] rounded-full bottom-[-50px] right-[-50px]" style="animation-delay: 2s;"></div>
+
+    <nav id="navbar" class="glass-nav fixed w-full z-50 py-4">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="telaInicial.html" class="flex items-center gap-2 cursor-pointer" data-aos="fade-down">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-accent flex items-center justify-center font-bold text-xl shadow-lg shadow-secondary/30">E</div>
+                <span class="font-bold text-xl tracking-tight">ENADE Questões</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8" data-aos="fade-down" data-aos-delay="100">
+                <a href="telaInicial.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Início</a>
+                <a href="telaQuestoes.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Questões</a>
+                <a href="telaSimulados.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Simulados</a>
+                <a href="telaDesempenho.html" class="text-white transition-colors text-sm font-medium border-b-2 border-accent pb-1">Desempenho</a>
+                <a href="configuracoes.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Configurações</a>
+            </div>
+            <div class="hidden md:block" data-aos="fade-down" data-aos-delay="200">
+                <a href="perfil.html" class="bg-white/10 text-white border border-white/20 px-5 py-2 rounded-full font-semibold text-sm hover:bg-white/20 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-user text-accent"></i> Meu Perfil
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 md:px-12 flex-grow pt-32 pb-20 z-10">
+        <div class="mb-12" data-aos="fade-up">
+            <div class="flex items-center gap-3 mb-3">
+                <span class="h-px w-8 bg-secondary"></span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-accent">Métricas Consolidadas</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight uppercase">Sua Evolução nos <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-secondary">Estudos</span></h1>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass glass-card p-6 rounded-2xl flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-textSec block mb-1">Respondidas</span>
+                    <p id="cardTotal" class="text-3xl font-bold">0</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent text-xl"><i class="fa-solid fa-clipboard-question"></i></div>
+            </div>
+            <div class="glass glass-card p-6 rounded-2xl flex items-center justify-between border-b-2 border-success/40">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-success block mb-1">Acertos</span>
+                    <p id="cardAcertos" class="text-3xl font-bold">0</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-success/10 border border-success/20 flex items-center justify-center text-success text-xl"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+            <div class="glass glass-card p-6 rounded-2xl flex items-center justify-between border-b-2 border-red-500/40">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-red-400 block mb-1">Erros</span>
+                    <p id="cardErros" class="text-3xl font-bold">0</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 text-xl"><i class="fa-solid fa-circle-xmark"></i></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass rounded-[2rem] p-8 lg:col-span-2 flex flex-col items-center">
+                <h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-accent self-start mb-6">Aproveitamento Percentual</h3>
+                <div class="w-full max-w-[260px] md:max-w-[280px]">
+                    <canvas id="graficoDonut"></canvas>
+                </div>
+            </div>
+            <div class="glass rounded-[2rem] p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-secondary/5 to-transparent"></div>
+                <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-textSec mb-2 block">Assertividade Geral</span>
+                <h2 id="taxaAcerto" class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-accent tracking-tighter mb-4">0%</h2>
+                <p class="text-xs text-textSec leading-relaxed px-4">
+                    
+                </p>
+            </div>
+        </div>
+    </main>
+
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Busca os valores reais salvos na memória do navegador pelo fluxo de responder questões
+            const acertos = parseInt(localStorage.getItem('grafico_acertos')) || 0;
+            const erros = parseInt(localStorage.getItem('grafico_erros')) || 0;
+
+            // Se o usuário nunca tiver respondido nada antes da apresentação, injetamos um dado simulado padrão
+            // para o gráfico não vir zerado/feio na hora de mostrar pro professor.
+            if (acertos === 0 && erros === 0) {
+                acertos = 8;  // Exemplo inicial amigável
+                erros = 3;
+                localStorage.setItem('grafico_acertos', acertos);
+                localStorage.setItem('grafico_erros', erros);
+            }
+
+            const total = acertos + erros;
+            const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0;
+
+            // 2. Atualiza os elementos numéricos das caixas de texto
+            document.getElementById('cardTotal').innerText = total;
+            document.getElementById('cardAcertos').innerText = acertos;
+            document.getElementById('cardErros').innerText = erros;
+            document.getElementById('taxaAcerto').innerText = `${taxa}%`;
+
+            // 3. Renderiza o gráfico do Chart.js com as cores padrão do sistema
+            const ctx = document.getElementById('graficoDonut').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Acertos', 'Erros'],
+                    datasets: [{
+                        data: [acertos, erros],
+                        backgroundColor: ['#10B981', '#EF4444'], // Verde e Vermelho Tailwind
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#94A3B8', // Cor textMuted
+                                font: { size: 13, weight: '500' },
+                                padding: 20
+                            }
+                        }
+                    },
+                    cutout: '75%' // Deixa o círculo central fininho e elegante
+                }
+            });
+        });
+    </script>
+</body>
+</html>

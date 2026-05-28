@@ -1,0 +1,528 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ENADE Questões | Fórum</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+theme:{
+extend:{
+fontFamily:{
+sans:['Inter','sans-serif']
+},
+colors:{
+primary:'#0B1F3A',
+secondary:'#2563EB',
+accent:'#38BDF8',
+success:'#22C55E',
+textMain:'#FFFFFF',
+textSec:'#CBD5E1'
+}
+}
+}
+}
+</script>
+
+<style>
+body{
+font-family:'Inter',sans-serif;
+background:#0B1F3A;
+color:white;
+overflow-x:hidden;
+}
+
+.hero-bg{
+background:linear-gradient(
+135deg,
+#0B1F3A 0%,
+#0a1426 50%,
+#1e3a8a 100%
+);
+min-height:100vh;
+position:relative;
+}
+
+.glass{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,0.1);
+box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+
+.glass-nav{
+background:transparent;
+transition:.3s;
+}
+
+.glass-nav.scrolled{
+background:rgba(11,31,58,0.85);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+textarea{
+resize:none;
+}
+
+#tsparticles{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:1;
+pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero-bg">
+
+<div id="tsparticles"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="glass-nav fixed w-full z-50 py-5">
+<div class="container mx-auto px-6 flex justify-between items-center">
+
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-accent flex items-center justify-center font-bold text-xl">
+E
+</div>
+
+<span class="font-bold text-xl">
+ENADE Questões
+</span>
+</div>
+
+<div class="hidden md:flex gap-8">
+
+<a id="menuInicio"
+class="text-textSec hover:text-white text-sm font-medium">
+Início
+</a>
+
+<a id="menuQuestoes"
+class="text-textSec hover:text-white text-sm font-medium">
+Questões
+</a>
+
+<a id="menuSimulados"
+class="text-textSec hover:text-white text-sm font-medium">
+Simulados
+</a>
+
+<a id="menuDesempenho"
+class="text-textSec hover:text-white text-sm font-medium">
+Desempenho
+</a>
+
+<a id="menuForum"
+class="text-white font-semibold text-sm">
+Fórum
+</a>
+
+<a id="menuConfig"
+class="text-textSec hover:text-white text-sm font-medium">
+Configurações
+</a>
+
+</div>
+
+<div id="desktop-auth-btn"></div>
+
+</div>
+</nav>
+
+<!-- CONTEÚDO -->
+<div class="container mx-auto px-6 pt-36 pb-20 relative z-10">
+
+<h1 class="text-5xl font-bold mb-3" data-aos="fade-up">
+Fórum de Discussão
+</h1>
+
+<p class="text-textSec mb-10" data-aos="fade-up">
+Pesquise dúvidas ou ajude outros estudantes.
+</p>
+
+<!-- PESQUISA -->
+<div class="glass rounded-3xl p-6 mb-8" data-aos="fade-up">
+
+<div class="flex gap-4 flex-wrap">
+
+<input
+id="searchInput"
+type="text"
+placeholder="Pesquisar por palavra-chave..."
+class="flex-1 glass p-4 rounded-xl bg-transparent outline-none"
+/>
+
+<button
+onclick="pesquisarForum()"
+class="bg-accent text-primary px-6 rounded-full font-semibold">
+Pesquisar
+</button>
+
+</div>
+</div>
+
+<!-- BOTÃO NOVA DÚVIDA -->
+<div class="mb-10" data-aos="fade-up">
+
+<button
+onclick="toggleNovaDuvida()"
+class="bg-accent text-primary px-6 py-3 rounded-full font-semibold">
+
+<i class="fa-solid fa-plus mr-2"></i>
+Nova dúvida
+
+</button>
+
+</div>
+
+<!-- FORMULÁRIO -->
+<div
+id="novaDuvidaBox"
+class="glass rounded-3xl p-8 mb-10"
+style="display:none;">
+
+<h2 class="text-2xl font-semibold mb-6">
+Adicionar dúvida
+</h2>
+
+<input
+id="novoTitulo"
+type="text"
+placeholder="Título da dúvida"
+class="w-full glass p-4 rounded-xl bg-transparent outline-none mb-4"
+/>
+
+<textarea
+id="novoConteudo"
+rows="4"
+placeholder="Descreva sua dúvida..."
+class="w-full glass p-4 rounded-xl bg-transparent outline-none mb-4"></textarea>
+
+<div class="flex gap-4">
+
+<button
+onclick="adicionarDuvida()"
+class="bg-accent text-primary px-6 py-3 rounded-full font-semibold">
+Publicar dúvida
+</button>
+
+<button
+onclick="toggleNovaDuvida()"
+class="bg-white/10 px-6 py-3 rounded-full">
+Cancelar
+</button>
+
+</div>
+</div>
+
+<!-- POSTS -->
+<div id="forumContainer"></div>
+
+</div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.3.0/tsparticles.slim.bundle.min.js"></script>
+
+<script>
+AOS.init({once:true});
+
+window.addEventListener('scroll',()=>{
+const navbar=document.getElementById('navbar');
+
+if(window.scrollY>50){
+navbar.classList.add('scrolled');
+}else{
+navbar.classList.remove('scrolled');
+}
+});
+
+tsParticles.load({
+id:"tsparticles",
+options:{
+particles:{
+number:{value:40},
+color:{
+value:["#38BDF8","#2563EB","#22C55E"]
+},
+move:{
+enable:true,
+speed:1,
+direction:"top"
+},
+opacity:{
+value:{min:0.1,max:0.4}
+},
+size:{
+value:{min:1,max:4}
+}
+}
+}
+});
+
+let posts = [
+{
+id:1,
+usuario:"Luiz",
+foto:"https://i.pravatar.cc/100?img=1",
+hora:"14:32",
+titulo:"Dúvida na questão sobre fila circular",
+conteudo:"Não entendi por que o primeiro elemento sai antes.",
+respostas:[
+{
+usuario:"Carlos",
+foto:"https://i.pravatar.cc/100?img=10",
+hora:"14:40",
+texto:"Porque FIFO significa First In First Out."
+},
+{
+usuario:"Ana",
+foto:"https://i.pravatar.cc/100?img=12",
+hora:"14:45",
+texto:"A fila sempre remove do início."
+}
+]
+}
+];
+
+renderizarForum();
+
+function renderizarForum(){
+const container=document.getElementById('forumContainer');
+container.innerHTML='';
+
+posts.forEach(post=>{
+container.innerHTML+=`
+<div class="glass rounded-3xl p-8 mb-8">
+
+<div class="flex items-center gap-4 mb-6">
+<img src="${post.foto}" class="w-14 h-14 rounded-full">
+
+<div>
+<p class="font-semibold">${post.usuario}</p>
+<p class="text-xs text-textSec">Postado às ${post.hora}</p>
+<p class="text-sm text-textSec">${post.titulo}</p>
+</div>
+</div>
+
+<p class="mb-6 text-textSec">${post.conteudo}</p>
+
+<div class="flex gap-4">
+<button onclick="toggleRespostas(${post.id})"
+class="bg-secondary px-5 py-2 rounded-full">
+Ver respostas
+</button>
+
+<button onclick="mostrarResponder(${post.id})"
+class="bg-accent text-primary px-5 py-2 rounded-full">
+Responder
+</button>
+</div>
+
+<div id="respostas-${post.id}" style="display:none" class="mt-6">
+
+${post.respostas.map(r=>`
+<div class="glass p-4 rounded-xl mb-3">
+<div class="flex items-center gap-3 mb-3">
+<img src="${r.foto}" class="w-10 h-10 rounded-full">
+<div>
+<p class="font-semibold">${r.usuario}</p>
+<p class="text-xs text-textSec">${r.hora}</p>
+</div>
+</div>
+<p class="text-textSec">${r.texto}</p>
+</div>
+`).join('')}
+
+<div id="responder-${post.id}" style="display:none;">
+<textarea
+id="input-resposta-${post.id}"
+rows="3"
+placeholder="Digite sua resposta..."
+class="w-full glass p-4 rounded-xl mt-4 bg-transparent"></textarea>
+
+<button
+onclick="enviarResposta(${post.id})"
+class="mt-3 bg-accent text-primary px-6 py-2 rounded-full">
+Enviar resposta
+</button>
+</div>
+
+</div>
+</div>
+`;
+});
+}
+
+function toggleRespostas(id){
+const box=document.getElementById(`respostas-${id}`);
+box.style.display=
+box.style.display==="block" ? "none" : "block";
+}
+
+function mostrarResponder(id){
+const box=document.getElementById(`responder-${id}`);
+const respostas=document.getElementById(`respostas-${id}`);
+
+respostas.style.display="block";
+
+box.style.display=
+box.style.display==="block" ? "none" : "block";
+}
+
+function adicionarDuvida(){
+const titulo=document.getElementById('novoTitulo').value;
+const conteudo=document.getElementById('novoConteudo').value;
+
+if(!titulo || !conteudo){
+alert("Preencha tudo.");
+return;
+}
+
+posts.unshift({
+id:Date.now(),
+usuario:"Você",
+foto:"https://i.pravatar.cc/100?img=8",
+hora:new Date().toLocaleTimeString('pt-BR',{
+hour:'2-digit',
+minute:'2-digit'
+}),
+titulo,
+conteudo,
+respostas:[]
+});
+
+document.getElementById('novoTitulo').value='';
+document.getElementById('novoConteudo').value='';
+
+toggleNovaDuvida();
+renderizarForum();
+}
+
+function enviarResposta(id){
+const input=document.getElementById(`input-resposta-${id}`);
+
+if(!input.value) return;
+
+const post=posts.find(p=>p.id===id);
+
+post.respostas.push({
+usuario:"Você",
+foto:"https://i.pravatar.cc/100?img=8",
+hora:new Date().toLocaleTimeString('pt-BR',{
+hour:'2-digit',
+minute:'2-digit'
+}),
+texto:input.value
+});
+
+renderizarForum();
+}
+
+function pesquisarForum(){
+const termo=document.getElementById('searchInput').value.toLowerCase();
+
+const container=document.getElementById('forumContainer');
+
+const filtrados=posts.filter(p=>
+p.titulo.toLowerCase().includes(termo) ||
+p.conteudo.toLowerCase().includes(termo)
+);
+
+container.innerHTML='';
+
+filtrados.forEach(post=>{
+container.innerHTML+=`
+<div class="glass rounded-3xl p-8 mb-8">
+<p class="font-semibold">${post.usuario}</p>
+<p class="text-textSec">${post.titulo}</p>
+<p class="mt-2">${post.conteudo}</p>
+</div>
+`;
+});
+}
+
+function toggleNovaDuvida(){
+const box=document.getElementById('novaDuvidaBox');
+
+box.style.display=
+box.style.display==="block"
+? "none"
+: "block";
+}
+
+/*
+=========================
+LOGIN / MENU INTELIGENTE
+=========================
+*/
+
+const usuarioLogado =
+sessionStorage.getItem('usuarioLogado');
+
+const desktopBtn =
+document.getElementById('desktop-auth-btn');
+
+if(usuarioLogado==="true"){
+
+desktopBtn.innerHTML=`
+<a href="perfil.html"
+class="bg-accent text-primary px-6 py-2.5 rounded-full font-semibold text-sm">
+<i class="fa-solid fa-user mr-2"></i>
+Perfil
+</a>
+`;
+
+}else{
+
+desktopBtn.innerHTML=`
+<a href="login.html"
+class="bg-white text-primary px-6 py-2.5 rounded-full font-semibold text-sm">
+Criar conta grátis
+</a>
+`;
+}
+
+document.getElementById('menuInicio').href =
+usuarioLogado==="true" ? 'telaInicial.html' : 'login.html';
+
+document.getElementById('menuQuestoes').href =
+usuarioLogado==="true" ? 'telaQuestoes.html' : 'login.html';
+
+document.getElementById('menuSimulados').href =
+usuarioLogado==="true" ? 'telaSimulados.html' : 'login.html';
+
+document.getElementById('menuDesempenho').href =
+usuarioLogado==="true" ? 'telaDesempenho.html' : 'login.html';
+
+document.getElementById('menuForum').href =
+usuarioLogado==="true" ? 'telaForum.html' : 'login.html';
+
+document.getElementById('menuConfig').href =
+usuarioLogado==="true" ? 'configuracoes.html' : 'login.html';
+
+</script>
+
+</body>
+</html>

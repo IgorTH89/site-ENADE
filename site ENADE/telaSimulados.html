@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENADE Questões | Configurar Simulado</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#0B1F3A',
+                        secondary: '#2563EB',
+                        accent: '#38BDF8',
+                        success: '#22C55E',
+                        textMain: '#FFFFFF',
+                        textSec: '#CBD5E1',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0B1F3A; color: white; overflow-x: hidden; }
+        .hero-bg { background: linear-gradient(135deg, #0B1F3A 0%, #0a1426 50%, #1e3a8a 100%); min-height: 100vh; position: relative; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+        .glass-nav { background: transparent; transition: .3s; }
+        .glass-nav.scrolled { background: rgba(11, 31, 58, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-glow { transition: .3s; }
+        .btn-glow:hover { transform: scale(1.02); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
+        #tsparticles { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; pointer-events: none; }
+        .checkbox-custom { accent-color: #38BDF8; }
+    </style>
+</head>
+
+<body>
+
+<section class="hero-bg flex flex-col min-h-screen">
+
+    <div id="tsparticles"></div>
+
+    <nav id="navbar" class="glass-nav fixed w-full z-50 py-5">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-accent flex items-center justify-center font-bold text-xl">E</div>
+                <span class="font-bold text-xl">ENADE Questões</span>
+            </div>
+
+            <div class="hidden md:flex gap-8">
+                <a id="menuInicio" class="text-textSec hover:text-white transition-colors text-sm font-medium">Início</a>
+                <a id="menuQuestoes" class="text-textSec hover:text-white transition-colors text-sm font-medium">Questões</a>
+                <a id="menuSimulados" class="text-white font-semibold text-sm">Simulados</a>
+                <a id="menuRanking" class="text-textSec hover:text-white transition-colors text-sm font-medium">Desempenho</a>
+                <a id="menuForum" class="text-textSec hover:text-white transition-colors text-sm font-medium">Fórum</a>
+                <a id="menuConfig" class="text-textSec hover:text-white transition-colors text-sm font-medium">Configurações</a>
+            </div>
+
+            <div id="desktop-auth-btn"></div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 pt-32 pb-20 relative z-10 flex-grow flex flex-col justify-center">
+        
+        <div class="text-center mb-10" data-aos="fade-up">
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-tight uppercase">Simulado <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-secondary">Personalizado</span></h1>
+            <p class="text-textSec max-w-md mx-auto text-sm md:text-base">Monte o seu ambiente de prova escolhendo o tempo, tamanho e disciplinas específicas do ENADE.</p>
+        </div>
+
+        <div class="glass rounded-[2rem] p-6 md:p-10 max-w-2xl mx-auto w-full" data-aos="fade-up" data-aos-delay="100">
+            <form id="formSimulado" class="space-y-6">
+                
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-accent mb-2">
+                        <i class="fa-solid fa-clock mr-1"></i> Tempo Limite de Prova
+                    </label>
+                    <select id="tempoSimulado" class="w-full bg-primary border border-white/10 rounded-xl p-3.5 text-white focus:border-accent outline-none cursor-pointer transition-colors">
+                        <option value="30" class="bg-primary">30 Minutos</option>
+                        <option value="60" class="bg-primary">1 Hora</option>
+                        <option value="120" class="bg-primary">2 Horas</option>
+                        <option value="180" class="bg-primary">3 Horas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-accent mb-2">
+                        <i class="fa-solid fa-list-ol mr-1"></i> Quantidade de Questões
+                    </label>
+                    <input type="number" id="qtdQuestoes" min="1" max="40" value="10" 
+                           class="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-white focus:border-accent outline-none transition-colors">
+                    <span class="text-[11px] text-textSec mt-1 block">Escolha entre 1 e 40 questões para compor o simulado.</span>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-accent mb-3">
+                        <i class="fa-solid fa-tags mr-1"></i> Disciplinas das Questões
+                    </label>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Programação Orientada a Objetos" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Programação Orientada a Objetos</span>
+                        </label>
+                        
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Estrutura de Dados" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Estrutura de Dados</span>
+                        </label>
+                        
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Banco de Dados" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Banco de Dados</span>
+                        </label>
+                        
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Engenharia de Software" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Engenharia de Software</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Desenvolvimento Móvel" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Desenvolvimento Móvel</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Matemática Discreta" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Matemática Discreta</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:border-accent/40 hover:bg-white/10 transition-all select-none">
+                            <input type="checkbox" name="disciplinas" value="Ética Computacional" class="checkbox-custom h-4 w-4 rounded">
+                            <span>Ética Computacional</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-secondary to-accent text-white font-bold text-sm uppercase tracking-wider py-4 rounded-xl btn-glow shadow-lg shadow-secondary/20 transition-all mt-4">
+                    <i class="fa-solid fa-play mr-2"></i> Iniciar Simulado Gerado
+                </button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.3.0/tsparticles.slim.bundle.min.js"></script>
+
+<script>
+AOS.init({ once: true });
+
+window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});
+
+/*
+===================================================
+CAPTURA E REDIRECIONAMENTO COM A NOMENCLATURA CORRETA
+===================================================
+*/
+document.getElementById('formSimulado').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const tempo = document.getElementById('tempoSimulado').value;
+    const quantidade = document.getElementById('qtdQuestoes').value;
+    
+    // Captura estritamente os elementos com name="disciplinas"
+    const checkboxesMarcados = document.querySelectorAll('input[name="disciplinas"]:checked');
+    const disciplinasSelecionadas = Array.from(checkboxesMarcados).map(checkbox => checkbox.value);
+
+    if (disciplinasSelecionadas.length === 0) {
+        alert("Por favor, selecione pelo menos uma disciplina para o seu simulado!");
+        return;
+    }
+
+    const disciplinasUrlParam = encodeURIComponent(disciplinasSelecionadas.join(','));
+    
+    // Enviando como &disciplinas= para casar perfeitamente com o seu Java Controller
+    window.location.href = `simulado.html?tempo=${tempo}&quantidade=${quantidade}&disciplinas=${disciplinasUrlParam}`;
+});
+
+/*
+=======================
+PARTÍCULAS DE FUNDO
+=======================
+*/
+tsParticles.load({
+    id: "tsparticles",
+    options: {
+        particles: {
+            number: { value: 40 },
+            color: { value: ["#38BDF8", "#2563EB", "#22C55E"] },
+            move: { enable: true, speed: 1, direction: "top" },
+            opacity: { value: { min: 0.1, max: 0.4 } },
+            size: { value: { min: 1, max: 4 } }
+        }
+    }
+});
+
+/*
+=======================
+CONTROLE DE SESSÃO
+=======================
+*/
+const usuarioLogado = sessionStorage.getItem('usuarioLogado');
+const desktopBtn = document.getElementById('desktop-auth-btn');
+
+if (usuarioLogado === "true") {
+    desktopBtn.innerHTML = `
+        <a href="perfil.html" class="bg-accent text-primary px-6 py-2.5 rounded-full font-semibold text-sm btn-glow">
+            <i class="fa-solid fa-user mr-2"></i> Perfil
+        </a>
+    `;
+} else {
+    desktopBtn.innerHTML = `
+        <a href="login.html" class="bg-white text-primary px-6 py-2.5 rounded-full font-semibold text-sm btn-glow">
+            Criar conta grátis
+        </a>
+    `;
+}
+
+const checarLink = (url) => usuarioLogado === "true" ? url : 'login.html';
+
+document.getElementById('menuInicio').href = checarLink('telaInicial.html');
+document.getElementById('menuQuestoes').href = checarLink('telaQuestoes.html');
+document.getElementById('menuSimulados').href = checarLink('telaSimulados.html');
+document.getElementById('menuRanking').href = checarLink('telaDesempenho.html');
+document.getElementById('menuForum').href = checarLink('telaForum.html');
+document.getElementById('menuConfig').href = checarLink('configuracoes.html');
+</script>
+
+</body>
+</html>

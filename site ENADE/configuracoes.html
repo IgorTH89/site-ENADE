@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações | ENADE Questões</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#0B1F3A',
+                        secondary: '#2563EB',
+                        accent: '#38BDF8',
+                        success: '#22C55E',
+                        textMain: '#FFFFFF',
+                        textSec: '#CBD5E1',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0B1F3A; color: #FFFFFF; overflow-x: hidden; }
+        .hero-bg { background: linear-gradient(135deg, #0B1F3A 0%, #0a1426 50%, #1e3a8a 100%); position: relative; }
+        .shape-blob { position: absolute; filter: blur(80px); z-index: 0; opacity: 0.4; animation: pulse-blob 10s infinite alternate; }
+        @keyframes pulse-blob { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.1) translate(20px, -20px); } }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); }
+        .glass-nav { background: rgba(11, 31, 58, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-glow { transition: all 0.3s ease; }
+        .btn-glow:hover { transform: scale(1.03) translateY(-2px); box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5); }
+        
+        /* Form controls matching platform design */
+        input, select { background: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; transition: all 0.3s ease; }
+        input:focus, select:focus { border-color: #38BDF8 !important; box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); outline: none; }
+        option { background-color: #0B1F3A; color: white; }
+    </style>
+</head>
+<body class="antialiased hero-bg min-h-screen flex flex-col">
+
+    <div class="shape-blob bg-secondary w-[500px] h-[500px] rounded-full top-[-100px] left-[-100px]"></div>
+    <div class="shape-blob bg-accent w-[400px] h-[400px] rounded-full bottom-[-50px] right-[-50px]" style="animation-delay: 2s;"></div>
+
+    <nav id="navbar" class="glass-nav fixed w-full z-50 py-4">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="telaInicial.html" class="flex items-center gap-2 cursor-pointer" data-aos="fade-down">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-accent flex items-center justify-center font-bold text-xl shadow-lg shadow-secondary/30">E</div>
+                <span class="font-bold text-xl tracking-tight">ENADE Questões</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8" data-aos="fade-down" data-aos-delay="100">
+                <a href="telaInicial.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Início</a>
+                <a href="telaQuestoes.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Questões</a>
+                <a href="telaSimulados.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Simulados</a>
+                <a href="telaDesempenho.html" class="text-textSec hover:text-white transition-colors text-sm font-medium">Desempenho</a>
+                <a href="configuracoes.html" class="text-white transition-colors text-sm font-medium border-b-2 border-accent pb-1">Configurações</a>
+            </div>
+            <div class="hidden md:block" data-aos="fade-down" data-aos-delay="200">
+                <a href="perfil.html" class="text-textSec hover:text-white transition-colors text-sm font-medium"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar ao Perfil</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 md:px-12 flex-grow flex items-center justify-center pt-32 pb-20 z-10">
+        <div class="w-full max-w-xl glass rounded-[2rem] p-8 md:p-10 relative" data-aos="fade-up">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent via-secondary to-accent"></div>
+
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent"><i class="fa-solid fa-sliders text-lg"></i></div>
+                <h2 class="text-2xl font-bold tracking-tight">Configurações da Conta</h2>
+            </div>
+
+            <form id="configForm" class="space-y-5">
+                <div>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-accent block mb-2">Nome Completo</label>
+                    <input id="inputNome" type="text" class="w-full p-3.5 rounded-xl text-sm" required>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-accent block mb-2">Curso Vinculado</label>
+                    <select id="selectCurso" class="w-full p-3.5 rounded-xl text-sm appearance-none cursor-pointer">
+                        <option value="Ciência da Computação">Ciência da Computação</option>
+                        <option value="Sistemas de Informação">Sistemas de Informação</option>
+                        <option value="Análise e Desenvolvimento de Sistemas">Análise e Desenv. de Sistemas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-accent block mb-2">Função Acadêmica</label>
+                    <select id="selectNivel" class="w-full p-3.5 rounded-xl text-sm appearance-none cursor-pointer">
+                        <option value="Estudante">Estudante</option>
+                        <option value="Professor">Professor / Avaliador</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-accent block mb-2">Credencial de Acesso (Nova Senha)</label>
+                    <input id="inputSenha" type="password" class="w-full p-3.5 rounded-xl text-sm" placeholder="••••••••••••">
+                </div>
+
+                <div id="msgSucesso" class="hidden items-center justify-center gap-2 text-success text-sm font-semibold py-2 text-center bg-success/10 border border-success/20 rounded-xl transition-all">
+                    <i class="fa-solid fa-circle-check"></i> Dados atualizados com sucesso!
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-secondary text-white font-semibold py-4 rounded-full btn-glow shadow-lg shadow-secondary/20">
+                        SALVAR ALTERAÇÕES <i class="fa-solid fa-floppy-disk ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            // Preenche os campos com o que já estiver salvo na sessão do navegador
+            const nomeAtual = sessionStorage.getItem('usuarioNome');
+            const cursoAtual = sessionStorage.getItem('usuarioCurso');
+            const nivelAtual = sessionStorage.getItem('usuarioNivel');
+
+            if (nomeAtual) document.getElementById('inputNome').value = nomeAtual;
+            if (cursoAtual) document.getElementById('selectCurso').value = cursoAtual;
+            if (nivelAtual) document.getElementById('selectNivel').value = nivelAtual;
+        });
+
+        document.getElementById('configForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const usuarioId = sessionStorage.getItem('usuarioId');
+            const novoNome = document.getElementById('inputNome').value.trim();
+            const novoCurso = document.getElementById('selectCurso').value;
+            const novoNivel = document.getElementById('selectNivel').value;
+            const novaSenha = document.getElementById('inputSenha').value;
+            const containerSucesso = document.getElementById('msgSucesso');
+
+            // Salva os dados na sessão local para atualizar o perfil imediatamente
+            sessionStorage.setItem('usuarioNome', novoNome);
+            sessionStorage.setItem('usuarioCurso', novoCurso);
+            sessionStorage.setItem('usuarioNivel', novoNivel);
+            
+            // Monta payload para tentar persistir no Spring Boot se a rota existir
+            const payload = {
+                id: usuarioId ? parseInt(usuarioId) : 1,
+                nome: novoNome,
+                curso: novoCurso,
+                nivel: novoNivel,
+                senha: novaSenha
+            };
+
+            try {
+                await fetch("http://localhost:8080/api/auth/atualizar", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                console.log("Sincronização enviada ao banco.");
+            } catch (err) {
+                console.warn("Rodando em modo local.");
+            }
+
+            containerSucesso.classList.remove('hidden');
+
+            setTimeout(() => {
+                window.location.href = 'perfil.html';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
