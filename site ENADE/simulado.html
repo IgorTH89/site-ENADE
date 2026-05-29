@@ -155,7 +155,7 @@
     async function buscarQuestoesDoBanco() {
         try {
             // URL apontando para o seu backend local (mude para a do Render quando fizer o deploy!)
-            const urlBase = "http://localhost:8080/api/questoes/simulado";
+            const urlBase = "https://enade-questoes.onrender.com/api/questoes/simulado";
             const urlCompleta = `${urlBase}?quantidade=${paramQuantidade}&disciplinas=${encodeURIComponent(paramDisciplinas)}`;
             
             const response = await fetch(urlCompleta);
