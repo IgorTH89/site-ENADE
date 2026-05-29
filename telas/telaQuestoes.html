@@ -256,7 +256,7 @@ tsParticles.load({
 
 // --- VARIÁVEIS GLOBAIS DE CONTROLE ---
 let questoes = []; 
-const BASE_URL = "https://enade-questoes.onrender.com/api";
+const BASE_URL = "https://enade-questoes.onrender.com";
 
 // Carrega as questões assim que a página abre
 document.addEventListener("DOMContentLoaded", () => {
@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 1. BUSCAR QUESTÕES DO BACKEND (SPRING BOOT)
 async function carregarQuestoesDoBackend(ano = "", disciplina = "") {
     try {
-        let url = `${BASE_URL}/questoes?size=50`; 
+        let url = `${BASE_URL}/api/questoes?size=50`; 
         if (ano) url += `&ano=${ano}`;
         if (disciplina) url += `&disciplina=${encodeURIComponent(disciplina)}`;
 
