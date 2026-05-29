@@ -10,7 +10,9 @@ Plataforma backend desenvolvida para gerenciamento, categorização e resoluçã
 
 Para avaliar o projeto em tempo real, acesse o link de produção abaixo (não requer nenhuma configuração ou execução local):
 
-👉 **[Acessar ENADE Questões (Link Vercel)]([https://site-enade.vercel.app/](https://site-enade.vercel.app/telaInicial.html))**
+👉 **Acessar ENADE Questões (Link Vercel)**
+   
+   https://site-enade.vercel.app/telaInicial.html
 
 ---
 
