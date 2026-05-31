@@ -1,6 +1,6 @@
 # 🎓 ENADE Questões - Plataforma de Simulados Inteligente
 
-> **Status do Projeto:** 🚀 Concluído & Em Produção
+> **Status do Projeto:** 🚀 Concluído
 
 Plataforma backend desenvolvida para gerenciamento, categorização e resolução de questões baseadas nos exames oficiais do ENADE (Exame Nacional de Desempenho dos Estudantes). O sistema permite que estudantes realizem simulados inteligentes com persistência de dados e análise de desempenho.
 
@@ -8,24 +8,33 @@ Plataforma backend desenvolvida para gerenciamento, categorização e resoluçã
 
 ## 🌐 Links do Projeto
 
-* **API em Produção (Render):** [https://enade-questoes.onrender.com](https://enade-questoes.onrender.com)
-* **Banco de Dados (Neon PostgreSQL):** Nuvem AWS (`us-east-1`)
+Para avaliar o projeto em tempo real, acesse o link de produção abaixo (não requer nenhuma configuração ou execução local):
+
+👉 **Acessar ENADE Questões (Link Vercel)**
+   
+   https://site-enade.vercel.app/telaInicial.html
 
 ---
 
 ## 🛠️ Tecnologias e Ferramentas
 
-O ecossistema do projeto foi construído utilizando as melhores práticas de desenvolvimento backend do mercado:
+### Frontend
+- **HTML5 & CSS3** (Estrutura e semântica)
+- **Tailwind CSS** (Estilização responsiva e moderna)
+- **JavaScript (ES6+)** (Consumo de APIs assíncronas via Fetch, manipulação dinâmica do DOM e gerenciamento de estado de sessão com `sessionStorage`)
+- **AOS (Animate On Scroll) & tsParticles** (Efeitos visuais e animações fluidas)
+- **Hospedagem:** Vercel
 
-* **Linguagem Principal:** Java 17
-* **Framework:** Spring Boot 3.x
-  * Spring Data JPA (Persistência e ORM)
-  * Spring Web (Criação de Endpoints RESTful)
-  * Spring Boot Actuator (Monitoramento de métricas)
-* **Banco de Dados:** PostgreSQL (Hospedado via Neon Serverless Postgres)
-* **Gerenciador de Dependências:** Maven
-* **Containers & DevOps:** Docker & Dockerfile
-* **Hospedagem da API:** Render Cloud
+### Backend
+- **Java 17** & **Spring Boot 3**
+- **Spring Data JPA** (Persistência e abstração de dados)
+- **Hibernate** (Mapeamento Objeto-Relacional)
+- **PostgreSQL Driver** (Conectividade com banco de dados)
+- **Hospedagem:** Render
+
+### Banco de Dados
+- **PostgreSQL** (Armazenamento relacional e suporte a dados estruturados em JSON para alternativas)
+- **Hospedagem:** Neon DB (Cloud PostgreSQL)
 
 ---
 
@@ -37,6 +46,10 @@ O projeto foi estruturado seguindo o padrão arquitetural em camadas para garant
 * **Camada de Controladores (Resource/Controller):** Exposição dos endpoints REST e manipulação de requisições HTTP.
 * **Camada de Serviço (Service):** Concentração de todas as regras de negócio da plataforma.
 * **Camada de Acesso a Dados (Repository):** Interfaces que estendem o `JpaRepository` para operações seguras de CRUD no PostgreSQL.
+* **Sistema de Autenticação Completo:** Endpoints robustos de `/cadastro` e `/login` com validação de dados no backend, criptografia lógica de fluxos e controle de sessão no frontend.
+* **Persistência de Dados Inteligente:** Tabelas populadas em nuvem com questões de diversas disciplinas da computação (POO, Estrutura de Dados, Engenharia de Software).
+* **Listagem Dinâmica e Paginada:** O frontend consome rotas estruturadas com paginação nativa do Spring (`Pageable`), otimizando o tráfego de dados.
+* **Resolução de Questões In-App:** Lógica client-side para validação de alternativas corretas/incorretas e exibição imediata do gabarito comentado vindo do banco de dados.
 
 ---
 
