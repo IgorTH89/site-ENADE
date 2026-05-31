@@ -199,46 +199,27 @@
 
         const q = questoes[indiceAtual];
         
-        // Atualiza textos estruturais
         document.getElementById('labelQuestaoNumero').innerText = `Questão ${indiceAtual + 1} de ${questoes.length}`;
         document.getElementById('labelTema').innerText = q.disciplina || "Geral"; 
         document.getElementById('enunciadoQuestao').innerText = q.enunciado;
 
         const containerAlt = document.getElementById('containerAlternativas');
-        containerAlt.innerHTML = ""; // Limpa as alternativas anteriores
+        containerAlt.innerHTML = ""; 
 
-        // --- TRATAMENTO DO JSONB DAS ALTERNATIVAS ---
-        // --- TRATAMENTO DO JSONB DAS ALTERNATIVAS ---
-        let listaAlternativas = {};
+        let listaAlternativas = [];
         try {
             listaAlternativas = typeof q.alternativas === 'string' ? JSON.parse(q.alternativas) : q.alternativas;
         } catch (e) {
             console.error("Erro ao processar as alternativas em JSON da questão: ", q.id);
         }
 
-        // Pega as chaves reais do JSON (como 'A', 'B', 'C', 'D', 'E' ou 'a', 'b'...)
-        const chavesReais = Object.keys(listaAlternativas).filter(chave => chave !== 'gabarito' && chave !== 'respostaCorreta');
-
-        chavesReais.sort().forEach((chaveOriginal) => {
-            const dadoAlternativa = listaAlternativas[chaveOriginal];
+        // Como agora sabemos que listaAlternativas é um Array puro de objetos:
+        listaAlternativas.forEach((itemAlt) => {
+            const letraVisual = itemAlt.letra.toUpperCase();
+            const textoExibicao = itemAlt.texto;
             
-            // CORREÇÃO DO [object Object]:
-            // Se o dado for um objeto, tentamos buscar a propriedade de texto comum (geralmente 'texto' ou 'enunciado')
-            // Se for uma String direta, usamos ela mesma.
-            let textoExibicao = "";
-            if (typeof dadoAlternativa === 'object' && dadoAlternativa !== null) {
-                textoExibicao = dadoAlternativa.texto || dadoAlternativa.descricao || dadoAlternativa.enunciado || JSON.stringify(dadoAlternativa);
-            } else {
-                textoExibicao = dadoAlternativa;
-            }
-
-            // Força a exibição visual como Maiúscula na tela (A, B, C...)
-            const letraVisual = chaveOriginal.toUpperCase();
-            
-            // Verifica se esta alternativa é a que o usuário já respondeu antes
             const jaSelecionada = respostasUsuario[q.id] === letraVisual;
 
-            // Cria o container clicável da alternativa
             const div = document.createElement('div');
             div.className = `flex items-start gap-4 bg-white/5 p-4 rounded-2xl border ${jaSelecionada ? 'border-accent bg-white/10' : 'border-white/10'} cursor-pointer hover:bg-white/10 transition-all select-none`;
             
@@ -252,7 +233,6 @@
                 </div>
             `;
 
-            // Evita conflito de cliques no input radio
             const inputRadio = div.querySelector('input');
             inputRadio.onclick = (event) => {
                 event.stopPropagation();
@@ -262,7 +242,6 @@
             containerAlt.appendChild(div);
         });
 
-        // Gerencia visibilidade dos botões de controle de navegação
         document.getElementById('btnAnterior').disabled = (indiceAtual === 0);
         
         if (indiceAtual === questoes.length - 1) {
@@ -361,16 +340,18 @@
         let countErros = 0;
 
         questoes.forEach(q => {
-            const respostaMarcada = respostasUsuario[q.id];
+            const respostaMarcada = respostasUsuario[q.id]; // Ex: "C"
             
-            // Tratamento do JSON para buscar o gabarito correto de dentro dele
-            let listaAlternativas = {};
+            let listaAlternativas = [];
             try {
                 listaAlternativas = typeof q.alternativas === 'string' ? JSON.parse(q.alternativas) : q.alternativas;
             } catch(e){}
 
-            // ATENÇÃO: Verifique se a chave do gabarito dentro do seu JSON se chama 'gabarito' ou 'respostaCorreta'
-            const respostaCertaDoBanco = listaAlternativas.gabarito || listaAlternativas.respostaCorreta;
+            // Procura dentro do array qual objeto possui a flag "correta: true"
+            const alternativaCorretaObj = listaAlternativas.find(alt => alt.correta === true);
+            
+            // Captura a letra correspondente (ex: "C")
+            const respostaCertaDoBanco = alternativaCorretaObj ? alternativaCorretaObj.letra.toUpperCase() : null;
 
             if (respostaMarcada === respostaCertaDoBanco) {
                 countAcertos++;
@@ -379,11 +360,9 @@
             }
         });
 
-        // Salva localmente no localStorage para alimentar a telaDesempenho.html
         localStorage.setItem('grafico_acertos', countAcertos);
         localStorage.setItem('grafico_erros', countErros);
         
-        // Redireciona para ver o Gráfico Donut
         window.location.href = 'telaDesempenho.html';
     }
 
