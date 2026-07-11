@@ -69,7 +69,7 @@ O projeto está totalmente conteinerizado, permitindo que qualquer desenvolvedor
 2. **Navegue até a pasta do projeto**
    ```bash
    cd site-ENADE/questoes
-3. **Cosntrua a imagem Docker**
+3. **Construa a imagem Docker**
     ```bash
     docker build -t enade-backend .
 4. **Execute o container**
