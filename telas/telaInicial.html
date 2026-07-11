@@ -678,7 +678,8 @@ BOTÃO PRINCIPAL (COMEÇAR GRATUITAMENTE)
 */
 
 if (botaoPrincipal) {
-    botaoPrincipal.addEventListener('click', () => {
+    botaoPrincipal.addEventListener('click', (e) => {
+        e.preventDefault();
 
         if (usuarioLogado === 'true') {
             // se estiver logado → vai para questões
